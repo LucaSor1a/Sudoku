@@ -1,12 +1,8 @@
 from Sudoku import Sudoku
+from API import API
 import sys
 
 class UserInput():
-
-    def table(self):
-        #table = ["53xx7xxxx", "6xx195xxx", "x98xxxx6x", "8xxx6xxx3", "4xx8x3xx1", "7xxx2xxx6", "x6xxxx28x", "xxx419xx5", "xxxx8xx79"]
-        table = ["534678912", "672195348", "198342567", "859761423", "426853791", "713924856", "961537284", "287419635", "345x86179"]
-        return table
 
     def numberInput(self, number):
         if (number > 0 and number < 10):
@@ -46,11 +42,12 @@ class UserInput():
 
 
 ui = UserInput()
-table = ui.table()
+api = API()
+table = api.Table()
 sudoku = Sudoku(table)
-ori_pos = sudoku.position_originals(table)
-while not sudoku.is_over(table):
-    sudoku.playing(ui.getValues(table), ori_pos, table)
+ori_pos = sudoku.position_originals()
+while not sudoku.is_over():
+    sudoku.playing(ui.getValues(table), ori_pos)
 print("\n\nFelicitaciones!!!!")
 print("Terminaste el juego de Sudoku\n\n")
 ui.showTable(table)
