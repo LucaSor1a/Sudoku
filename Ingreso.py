@@ -2,6 +2,7 @@ from Sudoku import Sudoku
 from API import API
 import sys
 
+
 class UserInput():
 
     def numberInput(self, number):
@@ -15,11 +16,11 @@ class UserInput():
             return True
         else:
             return False
-    
+
     def showTable(self, table):
         print("     1  2  3   4  5  6   7  8  9")
         for i in range(9):
-            if i % 3 == 0: 
+            if i % 3 == 0:
                 print("   -----------------------------")
             sys.stdout.write(str(i + 1) + "  ")
             for j in range(9):
