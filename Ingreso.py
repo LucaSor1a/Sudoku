@@ -17,14 +17,16 @@ class UserInput():
             return False
     
     def showTable(self, table):
+        print("     1  2  3   4  5  6   7  8  9")
         for i in range(9):
+            if i % 3 == 0: 
+                print("   -----------------------------")
+            sys.stdout.write(str(i + 1) + "  ")
             for j in range(9):
-                if j % 3 == 0 and j != 0:
-                    sys.stdout.write("|")    
+                if j % 3 == 0:
+                    sys.stdout.write("|")
                 sys.stdout.write(table[i][j].replace("", " "))
             print("")
-            if (i - 2) % 3 == 0 and i != 8: 
-                print("----------------------------")
 
     def getValues(self, table):
         self.showTable(table)
