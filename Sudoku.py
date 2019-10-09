@@ -1,12 +1,16 @@
+import math
+
+
 class Sudoku():
 
-    def __init__(self, table):
+    def __init__(self, table, size):
         self.table = table
+        self.size = size
 
     def position_originals(self):
         ori_pos = []
-        for i in range(9):
-            for j in range(9):
+        for i in range(self.size):
+            for j in range(self.size):
                 if self.table[i][j] != "x":
                     ori_pos.append(str(i)+str(j))
         return ori_pos
@@ -18,28 +22,30 @@ class Sudoku():
             return False
 
     def check_reps_col(self, column, value):
-        for i in range(9):
+        for i in range(self.size):
             if (self.table[i][column] == str(value)):
                 return False
             else:
                 return True
 
     def check_reps_block(self, row, column, value):
-        if (row < 3):
+        if (row < math.sqrt(self.size)):
             row = 0
-        elif (row >= 3 and row < 6):
-            row = 3
+        elif (row >= math.sqrt(self.size) and row < math.sqrt(self.size) * 2):
+            row = math.sqrt(self.size)
         else:
-            row = 6
-        if (column < 3):
+            row = math.sqrt(self.size) * 2
+
+        if (column < math.sqrt(self.size)):
             column = 0
-        elif (column >= 3 and column < 6):
-            column = 3
+        elif (column >= math.sqrt(self.size) and
+              column < math.sqrt(self.size) * 2):
+            column = math.sqrt(self.size)
         else:
-            column = 6
-        for i in range(3):
-            for j in range(3):
-                if (self.table[row + i][column + j] == str(value)):
+            column = math.sqrt(self.size) * 2
+        for i in range(int(math.sqrt(self.size))):
+            for j in range(int(math.sqrt(self.size))):
+                if (self.table[int(row + i)][int(column + j)] == str(value)):
                     return False
         return True
 
@@ -72,12 +78,13 @@ class Sudoku():
         if (self.overwrite(row, column, ori_pos) is False):
             print("Perdon, no se puede escribir en esa posicion")
         else:
-            self.table[row] = self.table[row][:column] + str(value)
-            + self.table[row][column+1:]
+            first = self.table[row][:column]
+            second = self.table[row][column+1:]
+            self.table[row] = first + str(value) + second
         return self.table
 
     def is_over(self):
-        for i in range(9):
+        for i in range(self.size):
             if ("x" in self.table[i]):
                 return False
         return True
@@ -88,4 +95,3 @@ class Sudoku():
         value = uinput[2]
         if self.check(row, column, value) is True:
             self.write(row, column, value, ori_pos)
-        self.is_over()
