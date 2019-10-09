@@ -4,10 +4,6 @@ import sys
 import math
 
 
-class NotANumberException(Exception):
-    pass
-
-
 class UserInput():
 
     def numberInput(self, number, sizev):
