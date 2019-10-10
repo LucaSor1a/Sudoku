@@ -6,18 +6,21 @@ import math
 
 class UserInput():
 
+    # Controla que el valor ingresado sea uno permitido, dentro del rango
     def numberInput(self, number, sizev):
         if (number > 0 and number <= sizev):
             return True
         else:
             return False
 
+    # Controla que la coordenada ingresada sea una permitida
     def position(self, row, column, sizev):
         if (row > 0 and row <= sizev and column > 0 and column <= sizev):
             return True
         else:
             return False
 
+    # Muestra la tabla al jugador
     def showTable(self, table, sizev):
         sys.stdout.write("     ")
         for x in range(sizev):
@@ -26,23 +29,24 @@ class UserInput():
                 sys.stdout.write(" ")
         print("")
         for i in range(sizev):
-            if i % math.sqrt(sizev) == 0:
-                sys.stdout.write("   ")
-                sys.stdout.write("----"*(sizev-1))
+            if (i % math.sqrt(sizev) == 0):
+                sys.stdout.write("   " + "----"*(sizev-1))
                 print("")
             sys.stdout.write(str(i + 1) + "  ")
             for j in range(sizev):
-                if j % math.sqrt(sizev) == 0:
+                if (j % math.sqrt(sizev) == 0):
                     sys.stdout.write("|")
                 sys.stdout.write(table[i][j].replace("", " "))
             print("")
 
+    # Controla que el usuario ingrese una dimension valida
     def dimention(self, sizev):
         if (sizev != 4 and sizev != 9):
             return False
         else:
             return True
 
+    # Pide el tamaño del tablero del sudoku y controla que este permitido
     def size(self):
         sizev = 0
         while not self.dimention(sizev):
@@ -54,6 +58,7 @@ class UserInput():
             except ValueError:
                 print("Ingresaste un valor no permitido, intentalo de nuevo")
 
+    # Toma valores validos para las coordenadas y para el valor de la casilla
     def getValues(self, table, sizev):
         self.showTable(table, sizev)
         number = 0
@@ -75,6 +80,7 @@ class UserInput():
                 return uinput
             print("Ingresaste un valor no permitido, intentalo de nuevo")
 
+    # Instancia del juego
     def run(self):
         ui = UserInput()
         sizev = ui.size()
