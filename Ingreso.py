@@ -1,7 +1,5 @@
 from Sudoku import Sudoku
 from API import API
-import sys
-import math
 
 
 class UserInput():
@@ -20,25 +18,6 @@ class UserInput():
         else:
             return False
 
-    # Muestra la tabla al jugador
-    def showTable(self, table, sizev):
-        sys.stdout.write("     ")
-        for x in range(sizev):
-            sys.stdout.write(str(x + 1) + "  ")
-            if (x == (math.sqrt(sizev)-1) or (x == (math.sqrt(sizev)*2-1))):
-                sys.stdout.write(" ")
-        print("")
-        for i in range(sizev):
-            if (i % math.sqrt(sizev) == 0):
-                sys.stdout.write("   " + "----"*(sizev-1))
-                print("")
-            sys.stdout.write(str(i + 1) + "  ")
-            for j in range(sizev):
-                if (j % math.sqrt(sizev) == 0):
-                    sys.stdout.write("|")
-                sys.stdout.write(table[i][j].replace("", " "))
-            print("")
-
     # Controla que el usuario ingrese una dimension valida
     def dimention(self, sizev):
         if (sizev != 4 and sizev != 9):
@@ -46,7 +25,7 @@ class UserInput():
         else:
             return True
 
-    # Pide el tamaño del tablero del sudoku y controla que este permitido
+    # Pide el tamano del tablero del sudoku y controla que este permitido
     def size(self):
         sizev = 0
         while not self.dimention(sizev):
@@ -59,8 +38,7 @@ class UserInput():
                 print("Ingresaste un valor no permitido, intentalo de nuevo")
 
     # Toma valores validos para las coordenadas y para el valor de la casilla
-    def getValues(self, table, sizev):
-        self.showTable(table, sizev)
+    def getValues(self, sizev):
         number = 0
         row = 0
         column = 0
@@ -68,7 +46,7 @@ class UserInput():
                                                                        column,
                                                                        sizev):
             try:
-                row = int(input("\n\nFila: "))
+                row = int(input("\nFila: "))
                 column = int(input("Columna: "))
                 number = int(input("Valor de la casilla: "))
             except ValueError:
@@ -89,10 +67,16 @@ class UserInput():
         sudoku = Sudoku(table, sizev)
         ori_pos = sudoku.position_originals()
         while not sudoku.is_over():
-            sudoku.playing(ui.getValues(table, sizev), ori_pos)
+            print(sudoku.showTable())
+            check, error_message = sudoku.playing(
+                ui.getValues(sizev),
+                ori_pos,
+            )
+            if not check:
+                print(error_message)
         print("\n\nFelicitaciones!!!!")
         print("Terminaste el juego de Sudoku\n\n")
-        ui.showTable(table, sizev)
+        print(sudoku.showTable())
 
 
 if __name__ == "__main__":

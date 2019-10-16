@@ -5,7 +5,7 @@ from API import API
 
 class TestAPI(unittest.TestCase):
 
-    def test_API_9(self):
+    def test_table__dimention_9_API(self):
         mock_response = MagicMock()
         mock_response.json = MagicMock(return_value={"response": True,
                                        "size": "9", "squares":
@@ -101,7 +101,7 @@ class TestAPI(unittest.TestCase):
                                   "15xxxx823",
                                   "26x935xxx"])
 
-    def test_API_4(self):
+    def test_table_dimention_4_API(self):
         mock_response = MagicMock()
         mock_response.json = MagicMock(return_value={"response": True,
                                                      "size": "4", "squares":
@@ -127,6 +127,24 @@ class TestAPI(unittest.TestCase):
                                   "x314",
                                   "3xxx",
                                   "1x2x"])
+
+    def test_API_table_size_4_rows(self):
+        result = API(4).Table()
+        self.assertEqual(len(result), 4)
+
+    def test_API_table_size_4_cols(self):
+        result = API(4).Table()
+        for i in range(len(result)):
+            self.assertEqual(len(result[i]), 4)
+
+    def test_API_table_size_9_rows(self):
+        result = API(9).Table()
+        self.assertEqual(len(result), 9)
+
+    def test_API_table_size_9_cols(self):
+        result = API(9).Table()
+        for i in range(len(result)):
+            self.assertEqual(len(result[i]), 9)
 
 
 if __name__ == '__main__':
