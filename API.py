@@ -6,9 +6,9 @@ class API():
     def __init__(self, size):
         self.size = size
 
-    # Pide a la api el tablero
-    # convierte al formato usado por el resto del codigo
     def Table(self):
+        # Pide a la api el tablero
+        # convierte al formato usado por el resto del codigo
         url = 'http://www.cs.utep.edu/cheon/ws/sudoku/new/?level=1&size='
         url += str(self.size)
         resp = requests.get(url)

@@ -9,6 +9,10 @@ class TestSudoku(unittest.TestCase):
                       "8xxx6xxx3", "4xx8x3xx1", "7xxx2xxx6",
                       "x6xxxx28x", "xxx419xx5", "xxxx8xx79"]
         self.sudoku = Sudoku(self.table, 9)
+        self.ori_pos = ["00", "01", "04", "10", "13", "14", "15", "21", "22",
+                        "27", "30", "34", "38", "40", "43", "45", "48", "50",
+                        "54", "58", "61", "66", "67", "73", "74", "75", "78",
+                        "84", "87", "88"]
 
     def test_row_repeated(self):
         self.assertEqual(self.sudoku.check_reps_row(0, 5),
@@ -35,52 +39,43 @@ class TestSudoku(unittest.TestCase):
                          (True, ""))
 
     def test_overwrite_originals(self):
-        self.assertEqual(self.sudoku.overwrite(0,
-                                               0,
-                                               self.sudoku.position_originals()
-                                               ),
+        self.assertEqual(self.sudoku.overwrite(0, 0),
                          (False,
-                          "Perdon, no se puede escribir en esa posicion"))
+                         "Perdon, no se puede escribir en esa posicion"))
 
     def test_overwrite_originals_positive(self):
-        self.assertEqual(self.sudoku.overwrite(0,
-                                               2,
-                                               self.sudoku.position_originals()
-                                               ),
-                         (True,
-                          ""))
+        self.assertEqual(self.sudoku.overwrite(0, 2), (True, ""))
 
     def test_position_originals(self):
-        self.assertEqual(self.sudoku.position_originals(),
+        self.table = ["53xx7xxxx", "6xx195xxx", "x98xxxx6x",
+                      "8xxx6xxx3", "4xx8x3xx1", "7xxx2xxx6",
+                      "x6xxxx28x", "xxx419xx5", "xxxx8xx79"]
+        self.sudoku = Sudoku(self.table, 9)
+        self.assertEqual(self.sudoku.ori_pos,
                          ["00", "01", "04", "10", "13", "14", "15", "21", "22",
                           "27", "30", "34", "38", "40", "43", "45", "48", "50",
                           "54", "58", "61", "66", "67", "73", "74", "75", "78",
                           "84", "87", "88"])
 
     def test_check_repeated_Block(self):
-        self.assertEqual(self.sudoku.check(0, 2, 5,
-                         self.sudoku.position_originals()),
+        self.assertEqual(self.sudoku.check(0, 2, 5),
                          (False, "El valor ya existe en el Bloque"))
 
     def test_check_repeated_Row(self):
-        self.assertEqual(self.sudoku.check(0, 6, 7,
-                         self.sudoku.position_originals()),
+        self.assertEqual(self.sudoku.check(0, 6, 7),
                          (False, "El valor ya existe en la Fila"))
 
     def test_check_repeated_Column(self):
-        self.assertEqual(self.sudoku.check(6, 4, 6,
-                         self.sudoku.position_originals()),
+        self.assertEqual(self.sudoku.check(6, 4, 6),
                          (False, "El valor ya existe en la Columna"))
 
     def test_check_repeated_Overwrite(self):
-        self.assertEqual(self.sudoku.check(0, 0, 3,
-                         self.sudoku.position_originals()),
+        self.assertEqual(self.sudoku.check(0, 0, 3),
                          (False,
                           "Perdon, no se puede escribir en esa posicion"))
 
     def test_check_not_repeated(self):
-        self.assertEqual(self.sudoku.check(0, 2, 4,
-                         self.sudoku.position_originals()), (True, ""))
+        self.assertEqual(self.sudoku.check(0, 2, 4), (True, ""))
 
     def test_written(self):
         self.sudoku.write(0, 2, 4)
@@ -140,19 +135,11 @@ class TestSudoku(unittest.TestCase):
                              '9  | x  x  x | x  8  x | x  7  9 \n'))
 
     def test_playing_write(self):
-        self.assertEqual(self.sudoku.playing([0, 2, 2],
-                         ["00", "01", "04", "10", "13", "14", "15", "21", "22",
-                          "27", "30", "34", "38", "40", "43", "45", "48", "50",
-                          "54", "58", "61", "66", "67", "73", "74", "75", "78",
-                          "84", "87", "88"]),
+        self.assertEqual(self.sudoku.playing([0, 2, 2]),
                          (True, ""))
 
     def test_playing_did_nothing(self):
-        self.assertEqual(self.sudoku.playing([0, 0, 2],
-                         ["00", "01", "04", "10", "13", "14", "15", "21", "22",
-                          "27", "30", "34", "38", "40", "43", "45", "48", "50",
-                          "54", "58", "61", "66", "67", "73", "74", "75", "78",
-                          "84", "87", "88"]),
+        self.assertEqual(self.sudoku.playing([0, 0, 2]),
                          (False,
                           "Perdon, no se puede escribir en esa posicion"))
 

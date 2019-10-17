@@ -4,29 +4,29 @@ from API import API
 
 class UserInput():
 
-    # Controla que el valor ingresado sea uno permitido, dentro del rango
     def numberInput(self, number, sizev):
+        # Controla que el valor ingresado sea uno permitido, dentro del rango
         if (number > 0 and number <= sizev):
             return True
         else:
             return False
 
-    # Controla que la coordenada ingresada sea una permitida
     def position(self, row, column, sizev):
+        # Controla que la coordenada ingresada sea una permitida
         if (row > 0 and row <= sizev and column > 0 and column <= sizev):
             return True
         else:
             return False
 
-    # Controla que el usuario ingrese una dimension valida
     def dimention(self, sizev):
+        # Controla que el usuario ingrese una dimension valida
         if (sizev != 4 and sizev != 9):
             return False
         else:
             return True
 
-    # Pide el tamano del tablero del sudoku y controla que este permitido
     def size(self):
+        # Pide el tamano del tablero del sudoku y controla que este permitido
         try:
             sizev = int(input("Ingrese la dimension del sudoku (4 o 9): "))
             if (self.dimention(sizev)):
@@ -35,8 +35,8 @@ class UserInput():
         except ValueError:
             print("Ingresaste un valor no permitido, intentalo de nuevo")
 
-    # Toma valores validos para las coordenadas y para el valor de la casilla
     def getValues(self, sizev):
+        # Toma valores para las coordenadas y para el valor de la casilla
         number = 0
         row = 0
         column = 0
@@ -56,22 +56,16 @@ class UserInput():
                 return uinput
             raise ValueError
 
-    # Instancia del juego
     def run(self):
-        ui = UserInput()
+        # Instancia del juego
         sizev = 0
         while not self.dimention(sizev):
-            sizev = ui.size()
+            sizev = self.size()
         api = API(sizev)
-        table = api.Table()
-        sudoku = Sudoku(table, sizev)
-        ori_pos = sudoku.position_originals()
+        sudoku = Sudoku(api.Table(), sizev)
         while not sudoku.is_over():
             print(sudoku.showTable())
-            check, error_message = sudoku.playing(
-                ui.getValues(sizev),
-                ori_pos,
-            )
+            check, error_message = sudoku.playing(self.getValues(sizev))
             if not check:
                 print(error_message)
         print("\n\nFelicitaciones!!!!")
