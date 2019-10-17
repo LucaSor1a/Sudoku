@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import patch, MagicMock
+import unittest.mock
 from Ingreso import UserInput
 
 
@@ -56,21 +57,42 @@ class TestIngreso(unittest.TestCase):
     def test_bad_dimention(self):
         self.assertEqual(self.ui.dimention(3), False)
 
-    """
-    def size(self):
-        sizev = 0
-        while not self.dimention(sizev):
-            try:
-                sizev = int(input("Ingrese la dimension del sudoku (4 o 9): "))
-                if (self.dimention(sizev)):
-                    return sizev
-                print("Ingresaste un valor no permitido, intentalo de nuevo")
-            except ValueError:
-                print("Ingresaste un valor no permitido, intentalo de nuevo")
-    """
+    def test_size_4(self):
+        with patch("builtins.input", return_value=4):
+            result = self.ui.size()
+        self.assertEqual(result, 4)
 
-    def test_algo_size(self):
-        pass
+    def test_size_9(self):
+        with patch("builtins.input", return_value=9):
+            result = self.ui.size()
+            self.assertEqual(result, 9)
+
+    def test_size_7(self):
+        with patch("builtins.input", return_value=7):
+            self.assertRaises(ValueError, self.ui.size())
+
+    def test_size_a(self):
+        with patch("builtins.input", return_value="a"):
+            self.assertRaises(ValueError, self.ui.size())
+
+    def test_getValues_9(self):
+        mock = MagicMock()
+        mock.side_effect = [1, 2, 3]
+        with patch("builtins.input", new=mock):
+            result = self.ui.getValues(9)
+        self.assertEqual(result, [0, 1, 3])
+
+    def test_getValues_a(self):
+        mock = MagicMock()
+        mock.side_effect = ["a", 2, 3]
+        with patch("builtins.input", new=mock):
+            self.assertRaises(ValueError, self.ui.size())
+
+    def test_getValues_11(self):
+        mock = MagicMock()
+        mock.side_effect = [1, 2, 29]
+        with patch("builtins.input", new=mock):
+            self.assertRaises(ValueError, self.ui.size())
 
 
 if __name__ == '__main__':
