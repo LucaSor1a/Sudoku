@@ -1,6 +1,6 @@
 [run]
 cover_pylib = false
-omit 
+omit =
     /home/travis/virtualenv/*
     */site-packages/*
     */bin/*
