@@ -31,14 +31,16 @@ class UserInput():
 
     def size(self):
         # Pide el tamano del tablero del sudoku y controla que este permitido
-        try:
-            self.sizev = int(input("Ingrese la dimension " +
-                                   "del sudoku (4 o 9): "))
-            if (not self.dimention()):
+        while not self.dimention():
+            try:
+                self.sizev = int(input("Ingrese la dimension " +
+                                       "del sudoku (4 o 9): "))
+                if (not self.dimention()):
+                    raise ValueError
+            except ValueError:
+                print("Ingresaste un valor no permitido, intentalo de nuevo")
                 raise ValueError
-        except ValueError:
-            print("Ingresaste un valor no permitido, intentalo de nuevo")
-            raise ValueError
+                continue
 
     def getValues(self):
         # Toma valores para las coordenadas y para el valor de la casilla
@@ -56,13 +58,14 @@ class UserInput():
             except ValueError:
                 print("Ingresaste un valor no permitido, intentalo de nuevo")
                 raise ValueError
+                continue
+
         uinput = [row - 1, column - 1, number]
         return uinput
 
     def run(self):
         # Instancia del juego
-        while not self.dimention():
-            self.size()
+        self.size()
         api = API(self.sizev)
         sudoku = Sudoku(api.Table(), self.sizev)
         while not sudoku.is_over():

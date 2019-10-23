@@ -3,22 +3,23 @@ from unittest.mock import patch, MagicMock
 import unittest.mock
 from Ingreso import UserInput
 from API import API
-from Sudoku import Sudoku
 
 
 class TestIngreso(unittest.TestCase):
 
     def setUp(self):
         self.ui = UserInput()
-        self.ui.sizev = 9
 
     def test_number_bigger_9(self):
+        self.ui.sizev = 9
         self.assertEqual(self.ui.numberInput(10), False)
 
     def test_number_smaller_1(self):
+        self.ui.sizev = 9
         self.assertEqual(self.ui.numberInput(0), False)
 
     def test_number_in_range(self):
+        self.ui.sizev = 9
         self.assertEqual(self.ui.numberInput(5), True)
 
     def test_number_bigger_4(self):
@@ -34,6 +35,7 @@ class TestIngreso(unittest.TestCase):
         self.assertEqual(self.ui.numberInput(3), True)
 
     def test_position_9(self):
+        self.ui.sizev = 9
         self.assertEqual(self.ui.position(5, 6), True)
 
     def test_position_4(self):
@@ -45,15 +47,19 @@ class TestIngreso(unittest.TestCase):
         self.assertEqual(self.ui.position(5, 1), False)
 
     def test_position_bad_row_bigger(self):
+        self.ui.sizev = 9
         self.assertEqual(self.ui.position(10, 6), False)
 
     def test_position_bad_row_smaller(self):
+        self.ui.sizev = 9
         self.assertEqual(self.ui.position(0, 6), False)
 
     def test_position_bad_column_bigger(self):
+        self.ui.sizev = 9
         self.assertEqual(self.ui.position(5, 11), False)
 
     def test_position_bad_column_smaller(self):
+        self.ui.sizev = 9
         self.assertEqual(self.ui.position(5, 0), False)
 
     def test_dimention_4(self):
@@ -61,6 +67,7 @@ class TestIngreso(unittest.TestCase):
         self.assertEqual(self.ui.dimention(), True)
 
     def test_dimention_9(self):
+        self.ui.sizev = 9
         self.assertEqual(self.ui.dimention(), True)
 
     def test_bad_dimention(self):
@@ -86,6 +93,7 @@ class TestIngreso(unittest.TestCase):
             self.assertRaises(ValueError, self.ui.size)
 
     def test_getValues_9(self):
+        self.ui.sizev = 9
         mock = MagicMock()
         mock.side_effect = [1, 2, 3]
         with patch("builtins.input", new=mock):
@@ -93,21 +101,22 @@ class TestIngreso(unittest.TestCase):
         self.assertEqual(result, [0, 1, 3])
 
     def test_getValues_a(self):
+        self.ui.sizev = 9
         mock = MagicMock()
         mock.side_effect = ["a", 1, 5]
         with patch("builtins.input", new=mock):
             self.assertRaises(ValueError, self.ui.getValues)
 
     def test_getValues_11(self):
+        self.ui.sizev = 9
         mock = MagicMock()
         mock.side_effect = [5, 1, 11]
         with patch("builtins.input", new=mock):
             self.assertRaises(ValueError, self.ui.getValues)
 
     def test_run(self):
-        self.ui.sizev = 4
         mock = MagicMock()
-        mock.side_effect = [1, 2, 1]
+        mock.side_effect = [4, 1, 2, 1]
         with patch("builtins.input", new=mock):
             mock_response = MagicMock()
             mock_response.json = MagicMock(return_value={"response": True,
