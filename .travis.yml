@@ -8,7 +8,7 @@ script:
 
 install:
   - pip install -r requirements.txt
-  - pip install -r parameterized
+  - pip install parameterized
 
 after_success:
   - coveralls
