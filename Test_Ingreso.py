@@ -102,6 +102,13 @@ class TestIngreso(unittest.TestCase):
         with patch("builtins.input", new=mock):
             self.assertRaises(ValueError, self.ui.getValues)
 
+    def test_run(self):
+        mock = MagicMock()
+        mock.side_effect = [4]
+        with patch("builtins.input", new=mock):
+            self.ui.size()
+            self.assertEqual(self.ui.sizev, 4)
+
 
 if __name__ == '__main__':
     unittest.main()
