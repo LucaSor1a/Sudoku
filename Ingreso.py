@@ -49,12 +49,8 @@ class UserInput():
                 number = int(input("Valor de la casilla: "))
             except ValueError:
                 print("Ingresaste un valor no permitido, intentalo de nuevo")
-            if (self.numberInput(number, sizev) and self.position(row,
-                                                                  column,
-                                                                  sizev)):
-                uinput = [row - 1, column - 1, number]
-                return uinput
-            raise ValueError
+        uinput = [row - 1, column - 1, number]
+        return uinput
 
     def run(self):
         # Instancia del juego
