@@ -2,6 +2,8 @@ import unittest
 from unittest.mock import patch, MagicMock
 import unittest.mock
 from Ingreso import UserInput
+from API import API
+from Sudoku import Sudoku
 
 
 class TestIngreso(unittest.TestCase):
@@ -103,11 +105,54 @@ class TestIngreso(unittest.TestCase):
             self.assertRaises(ValueError, self.ui.getValues)
 
     def test_run(self):
+        self.ui.sizev = 4
         mock = MagicMock()
-        mock.side_effect = [4]
+        mock.side_effect = [1, 2, 1]
         with patch("builtins.input", new=mock):
-            self.ui.size()
-            self.assertEqual(self.ui.sizev, 4)
+            mock_response = MagicMock()
+            mock_response.json = MagicMock(return_value={"response": True,
+                                                         "size": "4", "squar" +
+                                                         "es":
+                                                         [{"x": 0, "y": 0,
+                                                          "value": 4},
+                                                          {"x": 0, "y": 1,
+                                                           "value": 2},
+                                                          {"x": 0, "y": 2,
+                                                           "value": 3},
+                                                          {"x": 0, "y": 3,
+                                                           "value": 1},
+                                                          {"x": 1, "y": 1,
+                                                           "value": 3},
+                                                          {"x": 1, "y": 2,
+                                                           "value": 2},
+                                                          {"x": 1, "y": 3,
+                                                           "value": 4},
+                                                          {"x": 2, "y": 0,
+                                                           "value": 3},
+                                                          {"x": 2, "y": 1,
+                                                           "value": 1},
+                                                          {"x": 2, "y": 2,
+                                                           "value": 4},
+                                                          {"x": 2, "y": 3,
+                                                           "value": 2},
+                                                          {"x": 3, "y": 0,
+                                                           "value": 2},
+                                                          {"x": 3, "y": 1,
+                                                           "value": 4},
+                                                          {"x": 3, "y": 2,
+                                                           "value": 1},
+                                                          {"x": 3, "y": 3,
+                                                           "value": 3}]})
+            with patch("API.requests.get", return_value=mock_response):
+                API(4).Table()
+                fin = self.ui.run()
+        self.assertEqual(fin, '\n     1  2   3  4   \n' +
+                              '   ------------\n' +
+                              '1  | 4  1 | 3  2 \n' +
+                              '2  | 2  3 | 1  4 \n' +
+                              '   ------------\n' +
+                              '3  | 3  2 | 4  1 \n' +
+                              '4  | 1  4 | 2  3 \n')
 
 
 if __name__ == '__main__':
