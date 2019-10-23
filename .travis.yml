@@ -3,8 +3,8 @@ python:
   - "3.6"
 script:
   - coverage run Test_Sudoku.py
-  - coverage run Test_Ingreso.py
-  - coverage run Test_API.py
+  - coverage run -a Test_Ingreso.py
+  - coverage run -a Test_API.py
 
 install:
   - pip install -r requirements.txt
