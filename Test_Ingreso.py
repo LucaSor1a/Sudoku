@@ -86,11 +86,13 @@ class TestIngreso(unittest.TestCase):
 
     def test_size_7(self):
         with patch("builtins.input", return_value=7):
+            self.ui.size()
             patch("buitins.print", return_value="Ingresaste un valor no " +
                   "permitido, intentalo de nuevo")
 
     def test_size_a(self):
         with patch("builtins.input", return_value="a"):
+            self.ui.size()
             patch("buitins.print", return_value="Ingresaste un valor no " +
                   "permitido, intentalo de nuevo")
 
@@ -107,6 +109,7 @@ class TestIngreso(unittest.TestCase):
         mock = MagicMock()
         mock.side_effect = ["a", 1, 5]
         with patch("builtins.input", new=mock):
+            self.ui.size()
             patch("buitins.print", return_value="Ingresaste un valor no " +
                   "permitido, intentalo de nuevo")
 
@@ -115,6 +118,7 @@ class TestIngreso(unittest.TestCase):
         mock = MagicMock()
         mock.side_effect = [5, 1, 11]
         with patch("builtins.input", new=mock):
+            self.ui.size()
             patch("buitins.print", return_value="Ingresaste un valor no " +
                   "permitido, intentalo de nuevo")
 
