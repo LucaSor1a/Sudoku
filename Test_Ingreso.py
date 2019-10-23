@@ -82,27 +82,23 @@ class TestIngreso(unittest.TestCase):
     def test_size_9(self):
         with patch("builtins.input", return_value=9):
             self.ui.size()
-            self.assertEqual(self.ui.sizev, 9)
+        self.assertEqual(self.ui.sizev, 9)
 
-    def test_size_7(self):
-        with patch("builtins.input", return_value=7):
+    def test_size_mal(self):
+        mock = MagicMock()
+        mock.side_effect = [2, 4]
+        with patch("builtins.input", new=mock):
             self.ui.size()
-            patch("buitins.print", return_value="Ingresaste un valor no " +
-                  "permitido, intentalo de nuevo")
-
+        self.assertEqual(self.ui.sizev, 4)
+    """
     def test_size_a(self):
         with patch("builtins.input", return_value="a"):
-            self.ui.size()
-            patch("buitins.print", return_value="Ingresaste un valor no " +
+            patch("buitins.print", return_value1="Ingresaste un valor no " +
                   "permitido, intentalo de nuevo")
-
-    def test_getValues_9(self):
-        self.ui.sizev = 9
-        mock = MagicMock()
-        mock.side_effect = [1, 2, 3]
-        with patch("builtins.input", new=mock):
-            result = self.ui.getValues()
-        self.assertEqual(result, [0, 1, 3])
+            self.ui.size()
+        with patch("builtins.input", return_value=4):
+            self.ui.size()
+            self.assertEqual(self.ui.sizev, 4)
 
     def test_getValues_a(self):
         self.ui.sizev = 9
@@ -121,6 +117,14 @@ class TestIngreso(unittest.TestCase):
             self.ui.size()
             patch("buitins.print", return_value="Ingresaste un valor no " +
                   "permitido, intentalo de nuevo")
+    """
+    def test_getValues_9(self):
+        self.ui.sizev = 9
+        mock = MagicMock()
+        mock.side_effect = [1, 2, 3]
+        with patch("builtins.input", new=mock):
+            result = self.ui.getValues()
+        self.assertEqual(result, [0, 1, 3])
 
     def test_run(self):
         mock = MagicMock()

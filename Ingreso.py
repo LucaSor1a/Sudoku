@@ -55,7 +55,6 @@ class UserInput():
                     raise ValueError
             except ValueError:
                 print("Ingresaste un valor no permitido, intentalo de nuevo")
-
         uinput = [row - 1, column - 1, number]
         return uinput
 
