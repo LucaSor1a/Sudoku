@@ -1,5 +1,6 @@
 import unittest
 from Sudoku import Sudoku
+from parameterized import parameterized
 
 
 class TestSudoku(unittest.TestCase):
@@ -14,37 +15,101 @@ class TestSudoku(unittest.TestCase):
                         "54", "58", "61", "66", "67", "73", "74", "75", "78",
                         "84", "87", "88"]
 
-    def test_row_repeated(self):
-        self.assertEqual(self.sudoku.check_reps_row(0, 5),
+    @parameterized.expand([
+        (0, 5),
+        (1, 5),
+        (2, 9),
+        (3, 3),
+        (4, 1),
+        (5, 7),
+        (6, 2),
+        (7, 9),
+        (8, 8),
+    ])
+    def test_row_repeated(self, row, value):
+        self.assertEqual(self.sudoku.check_reps_row(row, value),
                          (False, "El valor ya existe en la Fila"))
 
-    def test_row_not_repeated(self):
-        self.assertEqual(self.sudoku.check_reps_row(0, 1),
+    @parameterized.expand([
+        (0, 2),
+        (1, 3),
+        (2, 5),
+        (3, 5),
+        (4, 7),
+        (5, 3),
+        (6, 9),
+        (7, 6),
+        (8, 1),
+    ])
+    def test_row_not_repeated(self, row, value):
+        self.assertEqual(self.sudoku.check_reps_row(row, value),
                          (True, ""))
 
-    def test_column_repeated(self):
-        self.assertEqual(self.sudoku.check_reps_col(0, 5),
+    @parameterized.expand([
+        (0, 8),
+        (1, 6),
+        (2, 8),
+        (3, 4),
+        (4, 1),
+        (5, 3),
+        (6, 2),
+        (7, 7),
+        (8, 9),
+    ])
+    def test_column_repeated(self, column, value):
+        self.assertEqual(self.sudoku.check_reps_col(column, value),
                          (False, "El valor ya existe en la Columna"))
 
-    def test_column_not_repeated(self):
-        self.assertEqual(self.sudoku.check_reps_col(0, 1),
+    @parameterized.expand([
+        (0, 2),
+        (1, 1),
+        (2, 7),
+        (3, 3),
+        (4, 4),
+        (5, 7),
+        (6, 1),
+        (7, 5),
+        (8, 2),
+    ])
+    def test_column_not_repeated(self, column, value):
+        self.assertEqual(self.sudoku.check_reps_col(column, value),
                          (True, ""))
 
-    def test_block_repeated(self):
-        self.assertEqual(self.sudoku.check_reps_block(1, 1, 5),
+    @parameterized.expand([
+        (0, 0, 3),
+        (2, 6, 6),
+        (8, 6, 5),
+    ])
+    def test_block_repeated(self, row, column, value):
+        self.assertEqual(self.sudoku.check_reps_block(row, column, value),
                          (False, "El valor ya existe en el Bloque"))
 
-    def test_block_not_repeated(self):
-        self.assertEqual(self.sudoku.check_reps_block(0, 2, 1,),
+    @parameterized.expand([
+        (0, 0, 1),
+        (2, 6, 3),
+        (8, 6, 1),
+    ])
+    def test_block_not_repeated(self, row, column, value):
+        self.assertEqual(self.sudoku.check_reps_block(row, column, value),
                          (True, ""))
 
-    def test_overwrite_originals(self):
-        self.assertEqual(self.sudoku.overwrite(0, 0),
+    @parameterized.expand([
+        (0, 0),
+        (4, 0),
+        (7, 3),
+    ])
+    def test_overwrite_originals(self, row, column):
+        self.assertEqual(self.sudoku.overwrite(row, column),
                          (False,
                          "Perdon, no se puede escribir en esa posicion"))
 
-    def test_overwrite_originals_positive(self):
-        self.assertEqual(self.sudoku.overwrite(0, 2), (True, ""))
+    @parameterized.expand([
+        (3, 7),
+        (1, 6),
+        (4, 7),
+    ])
+    def test_overwrite_originals_positive(self, row, column):
+        self.assertEqual(self.sudoku.overwrite(row, column), (True, ""))
 
     def test_position_originals(self):
         self.table = ["53xx7xxxx", "6xx195xxx", "x98xxxx6x",
