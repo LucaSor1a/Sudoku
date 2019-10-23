@@ -68,12 +68,14 @@ class TestIngreso(unittest.TestCase):
             self.assertEqual(result, 9)
 
     def test_size_7(self):
-        with patch("builtins.input", return_value=7):
-            self.assertRaises(ValueError, self.ui.size())
+        with self.assertRaises(ValueError) and patch("builtins.input",
+                                                     return_value=7):
+            self.ui.size()
 
     def test_size_a(self):
-        with patch("builtins.input", return_value="a"):
-            self.assertRaises(ValueError, self.ui.size())
+        with self.assertRaises(ValueError) and patch("builtins.input",
+                                                     return_value="a"):
+            self.ui.size()
 
     def test_getValues_9(self):
         mock = MagicMock()
@@ -85,14 +87,16 @@ class TestIngreso(unittest.TestCase):
     def test_getValues_a(self):
         mock = MagicMock()
         mock.side_effect = ["a", 2, 3]
-        with patch("builtins.input", new=mock):
-            self.assertRaises(ValueError, self.ui.size())
+        with self.assertRaises(ValueError) and patch("builtins.input",
+                                                     new=mock):
+            self.ui.size()
 
     def test_getValues_11(self):
         mock = MagicMock()
         mock.side_effect = [1, 2, 29]
-        with patch("builtins.input", new=mock):
-            self.assertRaises(ValueError, self.ui.size())
+        with self.assertRaises(ValueError) and patch("builtins.input",
+                                                     new=mock):
+            self.ui.size()
 
 
 if __name__ == '__main__':
