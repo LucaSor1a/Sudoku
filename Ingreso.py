@@ -39,8 +39,6 @@ class UserInput():
                     raise ValueError
             except ValueError:
                 print("Ingresaste un valor no permitido, intentalo de nuevo")
-                raise ValueError
-                continue
 
     def getValues(self):
         # Toma valores para las coordenadas y para el valor de la casilla
@@ -57,8 +55,6 @@ class UserInput():
                     raise ValueError
             except ValueError:
                 print("Ingresaste un valor no permitido, intentalo de nuevo")
-                raise ValueError
-                continue
 
         uinput = [row - 1, column - 1, number]
         return uinput

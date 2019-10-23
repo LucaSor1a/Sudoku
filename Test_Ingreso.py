@@ -86,11 +86,13 @@ class TestIngreso(unittest.TestCase):
 
     def test_size_7(self):
         with patch("builtins.input", return_value=7):
-            self.assertRaises(ValueError, self.ui.size)
+            patch("buitins.print", return_value="Ingresaste un valor no " +
+                  "permitido, intentalo de nuevo")
 
     def test_size_a(self):
         with patch("builtins.input", return_value="a"):
-            self.assertRaises(ValueError, self.ui.size)
+            patch("buitins.print", return_value="Ingresaste un valor no " +
+                  "permitido, intentalo de nuevo")
 
     def test_getValues_9(self):
         self.ui.sizev = 9
@@ -105,18 +107,20 @@ class TestIngreso(unittest.TestCase):
         mock = MagicMock()
         mock.side_effect = ["a", 1, 5]
         with patch("builtins.input", new=mock):
-            self.assertRaises(ValueError, self.ui.getValues)
+            patch("buitins.print", return_value="Ingresaste un valor no " +
+                  "permitido, intentalo de nuevo")
 
     def test_getValues_11(self):
         self.ui.sizev = 9
         mock = MagicMock()
         mock.side_effect = [5, 1, 11]
         with patch("builtins.input", new=mock):
-            self.assertRaises(ValueError, self.ui.getValues)
+            patch("buitins.print", return_value="Ingresaste un valor no " +
+                  "permitido, intentalo de nuevo")
 
     def test_run(self):
         mock = MagicMock()
-        mock.side_effect = [4, 1, 2, 1]
+        mock.side_effect = [4, 3, 2, 1, 1, 2, 1]
         with patch("builtins.input", new=mock):
             mock_response = MagicMock()
             mock_response.json = MagicMock(return_value={"response": True,
