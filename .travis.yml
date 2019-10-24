@@ -2,9 +2,7 @@ language: python
 python:
   - "3.6"
 script:
-  - coverage run Test_Sudoku.py
-  - coverage run -a Test_Ingreso.py
-  - coverage run -a Test_API.py
+  - coverage run Test_Suite.py
 
 install:
   - pip install -r requirements.txt
