@@ -71,7 +71,6 @@ class UserInput():
         print("\n\nFelicitaciones!!!!")
         print("Terminaste el juego de Sudoku\n\n")
         print(sudoku.showTable())
-        return sudoku.showTable()
 
 
 if __name__ == "__main__":

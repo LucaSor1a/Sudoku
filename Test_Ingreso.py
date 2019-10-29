@@ -1,9 +1,8 @@
 import unittest
-from unittest.mock import patch, MagicMock
-import unittest.mock
-from Ingreso import UserInput
-from API import API
+import io
 from parameterized import parameterized
+from unittest.mock import patch, MagicMock, call
+from Ingreso import UserInput
 
 
 class TestIngreso(unittest.TestCase):
@@ -77,26 +76,34 @@ class TestIngreso(unittest.TestCase):
 
     @parameterized.expand([
         # Test entradas validas
-        ([4], 4),
-        ([9], 9),
+        (4, ),
+        (9, )
+    ])
+    def test_size(self, number):
+        with patch("builtins.input", return_value=number):
+            self.ui.size()
+        self.assertEqual(self.ui.sizev, number)
+
+    @parameterized.expand([
         # Test entradas NO validas
         ([2, 4], 4),
         (["a", 4], 4)
     ])
-    def test_size(self, numbers, expected):
+    @patch('builtins.print')
+    def test_size_not_valid(self, numbers, expected, mocked_print):
         mock = MagicMock()
         mock.side_effect = numbers
         with patch("builtins.input", new=mock):
             self.ui.size()
+            assert mocked_print.mock_calls == [call('Ingresaste un valor no pe'
+                                                    'rmitido, intentalo de nue'
+                                                    'vo')]
         self.assertEqual(self.ui.sizev, expected)
 
     @parameterized.expand([
         # Test entradas validas
         (4, [2, 3, 2], [1, 2, 2]),
-        (9, [1, 2, 3], [0, 1, 3]),
-        # Test entradas NO validas
-        (9, ["a", 2, 3, 1], [1, 2, 1]),
-        (9, [1, 11, 1, 1, 2, 3], [0, 1, 3])
+        (9, [1, 2, 3], [0, 1, 3])
     ])
     def test_getValues(self, size, numbers, expected):
         self.ui.sizev = size
@@ -106,7 +113,25 @@ class TestIngreso(unittest.TestCase):
             result = self.ui.getValues()
         self.assertEqual(result, expected)
 
-    def test_run(self):
+    @parameterized.expand([
+        # Test entradas NO validas
+        (9, ["a", 2, 3, 1], [1, 2, 1]),
+        (9, [1, 11, 1, 1, 2, 3], [0, 1, 3])
+    ])
+    @patch('builtins.print')
+    def test_getValues_not_valid(self, size, numbers, expected, mocked_print):
+        self.ui.sizev = size
+        mock = MagicMock()
+        mock.side_effect = numbers
+        with patch("builtins.input", new=mock):
+            result = self.ui.getValues()
+            assert mocked_print.mock_calls == [call('Ingresaste un valor no pe'
+                                                    'rmitido, intentalo de nue'
+                                                    'vo')]
+        self.assertEqual(result, expected)
+
+    @unittest.mock.patch("sys.stdout", new_callable=io.StringIO)
+    def test_run(self, mocked_print):
         mock = MagicMock()
         mock.side_effect = [4, 3, 2, 1, 1, 2, 1]
         with patch("builtins.input", new=mock):
@@ -145,15 +170,33 @@ class TestIngreso(unittest.TestCase):
                                                           {"x": 3, "y": 3,
                                                            "value": 3}]})
             with patch("API.requests.get", return_value=mock_response):
-                API(4).Table()
-                fin = self.ui.run()
-        self.assertEqual(fin, '\n     1  2   3  4   \n' +
-                              '   ------------\n' +
-                              '1  | 4  1 | 3  2 \n' +
-                              '2  | 2  3 | 1  4 \n' +
-                              '   ------------\n' +
-                              '3  | 3  2 | 4  1 \n' +
-                              '4  | 1  4 | 2  3 \n')
+                self.ui.run()
+            self.assertEqual(mocked_print.getvalue(),
+                             '\n     1  2   3  4   \n'
+                             '   ------------\n'
+                             '1  | 4  x | 3  2 \n'
+                             '2  | 2  3 | 1  4 \n'
+                             '   ------------\n'
+                             '3  | 3  2 | 4  1 \n'
+                             '4  | 1  4 | 2  3 \n'
+                             '\nPerdon, no se puede escribir en esa posicion\n'
+                             '\n     1  2   3  4   \n'
+                             '   ------------\n'
+                             '1  | 4  x | 3  2 \n'
+                             '2  | 2  3 | 1  4 \n'
+                             '   ------------\n'
+                             '3  | 3  2 | 4  1 \n'
+                             '4  | 1  4 | 2  3 \n'
+                             '\n\n\nFelicitaciones!!!!\n'
+                             'Terminaste el juego de Sudoku\n\n\n'
+                             '\n     1  2   3  4   \n'
+                             '   ------------\n'
+                             '1  | 4  1 | 3  2 \n'
+                             '2  | 2  3 | 1  4 \n'
+                             '   ------------\n'
+                             '3  | 3  2 | 4  1 \n'
+                             '4  | 1  4 | 2  3 \n\n'
+                             )
 
 
 if __name__ == '__main__':
